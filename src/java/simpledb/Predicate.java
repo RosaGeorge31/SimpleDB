@@ -6,13 +6,16 @@ import java.io.Serializable;
  * Predicate compares tuples to a specified Field value.
  */
 public class Predicate implements Serializable {
-
+	
+	
     private static final long serialVersionUID = 1L;
-
+    	private int field_;
+	private Op op_;
+	private Field operand_;
     /** Constants used for return codes in Field.compare */
     public enum Op implements Serializable {
         EQUALS, GREATER_THAN, LESS_THAN, LESS_THAN_OR_EQ, GREATER_THAN_OR_EQ, LIKE, NOT_EQUALS;
-
+	
         /**
          * Interface to access operations by a string containing an integer
          * index for command-line convenience.
@@ -53,7 +56,7 @@ public class Predicate implements Serializable {
             throw new IllegalStateException("impossible to reach here");
         }
     }
-
+	
     /**
      * Constructor.
      * 
@@ -66,6 +69,9 @@ public class Predicate implements Serializable {
      */
     public Predicate(int field, Op op, Field operand) {
         // some code goes here
+	field_ = field;
+	op_ = op;
+	operand_ = operand;
     }
 
     /**
@@ -74,6 +80,9 @@ public class Predicate implements Serializable {
     public int getField()
     {
         // some code goes here
+	if(field_!=0)
+	return field_;
+	
         return -1;
     }
 
@@ -83,6 +92,10 @@ public class Predicate implements Serializable {
     public Op getOp()
     {
         // some code goes here
+	
+	if(op_!=null)
+	return op_;
+	
         return null;
     }
     
@@ -92,6 +105,9 @@ public class Predicate implements Serializable {
     public Field getOperand()
     {
         // some code goes here
+	if(operand_!=null)
+	return operand_;
+	
         return null;
     }
     
@@ -105,10 +121,18 @@ public class Predicate implements Serializable {
      *            The tuple to compare against
      * @return true if the comparison is true, false otherwise.
      */
-    public boolean filter(Tuple t) {
+    public boolean filter(Tuple t)
+	{	
         // some code goes here
-        return false;
-    }
+	
+        Field tup_field = t.getField(getField()); 
+    	if(tup_field!=null)
+	{
+	if(tuple_field.compare(op_, operand_)==true)
+	return true;
+	}
+	return false;
+     }
 
     /**
      * Returns something useful, like "f = field_id op = op_string operand =
@@ -116,6 +140,8 @@ public class Predicate implements Serializable {
      */
     public String toString() {
         // some code goes here
-        return "";
+	String res = "";	
+	res = "f = "+ field_ + " op = " + op_.toString() + " operand = " + operand_.toString();
+	return res;
     }
 }
